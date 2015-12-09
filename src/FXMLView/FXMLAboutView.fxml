@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="280.0" prefWidth="240.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FXMLAboutViewController">
+   <children>
+      <Label layoutX="24.0" layoutY="14.0" text="Media Library" textAlignment="CENTER">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Label layoutX="61.0" layoutY="241.0" text="by Christian Ekenstedt" />
+      <Label layoutX="72.0" layoutY="258.0" text="Gustaf Holmström" />
+      <Label fx:id="hostLabel" layoutX="47.0" layoutY="132.0" text="Info" />
+      <Label fx:id="databaseLabel" layoutX="47.0" layoutY="149.0" text="Label" />
+      <Label fx:id="userLabel" layoutX="47.0" layoutY="166.0" text="Label" />
+      <ImageView fitHeight="64.0" fitWidth="64.0" layoutX="88.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="resources/playIcon.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

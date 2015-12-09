@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Controller.FXMLDocumentController">
+    <children>
+        <Label fx:id="userLabel" layoutX="85.0" layoutY="58.0" minHeight="16" minWidth="69" text="User" />
+      <Label fx:id="passwdLabel" layoutX="85.0" layoutY="100.0" minHeight="16" minWidth="69" text="Password:" />
+      <ComboBox fx:id="userPicker" layoutX="85.0" layoutY="75.0" onAction="#handleUserPick" prefWidth="150.0" promptText="Pick a User" />
+      <Label fx:id="titleLabel" layoutX="124.0" layoutY="41.0" minHeight="16" minWidth="69" text="Media Library" />
+      <PasswordField fx:id="passwdTextField" layoutX="86.0" layoutY="117.0" onAction="#handlePasswdInput" prefHeight="25.0" prefWidth="150.0" />
+      <Button fx:id="loginButton" layoutX="131.0" layoutY="161.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Login" />
+    </children>
+</AnchorPane>
