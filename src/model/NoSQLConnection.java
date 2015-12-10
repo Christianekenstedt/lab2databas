@@ -35,7 +35,7 @@ public class NoSQLConnection implements DBCommunication{
     public boolean connectToDatabase() {
 
         client = new MongoClient("192.168.0.4");
-        db = client.getDatabase("test");
+        db = client.getDatabase("medialibrary");
 
 
 

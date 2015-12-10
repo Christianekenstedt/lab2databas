@@ -1,11 +1,21 @@
 package model;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.Mongo;
+import com.mongodb.MongoURI;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.BsonDateTime;
+import org.bson.BsonDocument;
 import org.bson.Document;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
@@ -19,38 +29,43 @@ public class CreateDB {
         //Fill the database, probably only one-time-use
         this.db = db;
 
+
     }
 
-    public void createCollections(){
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+    public void createCollections() {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/mm/dd");
+
         try {
-            db.getCollection("restaurants").insertOne(
-                    new Document("address",
-                            new Document()
-                                    .append("street", "2 Avenue")
-                                    .append("zipcode", "10075")
-                                    .append("building", "1480")
-                                    .append("coord", asList(-73.9557413, 40.7720266)))
-                            .append("borough", "Manhattan")
-                            .append("cuisine", "Italian")
-                            .append("grades", asList(
-                                    new Document()
-                                            .append("date", format.parse("2014-10-01T00:00:00Z"))
-                                            .append("grade", "A")
-                                            .append("score", 11),
-                                    new Document()
-                                            .append("date", format.parse("2014-01-16T00:00:00Z"))
-                                            .append("grade", "B")
-                                            .append("score", 17)))
-                            .append("name", "Vella")
-                            .append("restaurant_id", "41704620"));
+            db.getCollection("album").insertOne(
+                    new Document("name","Jack Black")
+                            .append("ReleaseDate",format.parse("2006/01/01"))
+                            .append("genre","rock")
+                            .append("grade","very good")
+            );
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        db.createCollection("artist");
+        db.createCollection("genre");
+        db.createCollection("grade");
+        db.createCollection("review");
+        db.createCollection("user");
+
+
+
+
     }
 
     public void dropDatabase(){
-        db.getCollection("restaurants").deleteMany(new Document());
+
+        db.getCollection("album").drop();
+        db.getCollection("artist").drop();
+        db.getCollection("genre").drop();
+        db.getCollection("grade").drop();
+        db.getCollection("review").drop();
+        db.getCollection("user").drop();
     }
 
 
