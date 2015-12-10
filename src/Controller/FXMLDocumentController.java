@@ -23,7 +23,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.DBCommunication;
 import model.MySQLConnection;
+import model.NoSQLConnection;
 
 /**
  *
@@ -87,25 +89,25 @@ public class FXMLDocumentController implements Initializable {
         
         String pwd = passwdTextField.getText();
         if(userPicker.getValue() != null){
-            MySQLConnection connection= new MySQLConnection("db.christianekenstedt.se", "medialibrary", userThree, pwd);
+            //DBCommunication connection= new MySQLConnection("db.christianekenstedt.se", "medialibrary", userThree, pwd);
+
+            DBCommunication connection = new NoSQLConnection();
+
             loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
             
             Scene mainScene = new Scene(mainParent);
             Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLMainViewController c = loader.getController();
-            c.initConnection(connection);
+            c.initConnection((NoSQLConnection) connection);
+
             if(connection.connectToDatabase()){
                 mainStage.setScene(mainScene);
                 mainStage.hide();
                 mainStage.getIcons().add(new Image("resources/playIcon.png"));
                 mainStage.setTitle("Media Library");
                 mainStage.setOnCloseRequest((WindowEvent event1) -> {
-                    try {
-                        connection.closeConnection();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    connection.closeConnection();
                 });
                 mainStage.show();
             }else showAlert("Invalid password!");

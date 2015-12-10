@@ -9,7 +9,10 @@ import java.util.ArrayList;
  * @author Christian Ekenstedt & Gustaf Holmström
  */
 public interface DBCommunication {
-    
+
+    public boolean connectToDatabase();
+
+    public void closeConnection();
     /**
      * Add's album to the database
      * @param title
@@ -28,7 +31,7 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumsByArtist(String name)throws SQLException;
+    public ArrayList<Object> getAlbumsByArtist(String name);
 
     /**
      *
@@ -36,21 +39,21 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumByTitle(String name)throws SQLException;
+    public ArrayList<Object> getAlbumByTitle(String name);
 
     /**
      *
      * @return
      * @throws SQLException
      */
-    public ArrayList<Genre> getGenre()throws SQLException;
+    public ArrayList<Genre> getGenre();
 
     /**
      *
      * @return
      * @throws SQLException
      */
-    public ArrayList<Grade> getGrades()throws SQLException;
+    public ArrayList<Grade> getGrades();
 
     /**
      *
@@ -58,7 +61,7 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumByGenre(int genre) throws SQLException;
+    public ArrayList<Object> getAlbumByGenre(int genre);
 
     /**
      *
@@ -66,5 +69,5 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumByGrade(int grade) throws SQLException;
+    public ArrayList<Object> getAlbumByGrade(int grade);
 }   

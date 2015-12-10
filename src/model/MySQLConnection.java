@@ -67,7 +67,7 @@ public class MySQLConnection implements DBCommunication{
      * @return  boolean wherer the connection is successful, true if success
      * @throws SQLException
      */
-    public boolean connectToDatabase()throws SQLException{
+    public boolean connectToDatabase(){
         String server = "jdbc:mysql://" + host + ":3306/" + database +
 			"?UseClientEnc=UTF8";
         try {	
@@ -91,9 +91,14 @@ public class MySQLConnection implements DBCommunication{
      * Closes the connection to the server
      * @throws SQLException 
      */
-    public void closeConnection() throws SQLException{
+    @Override
+    public void closeConnection(){
         if(con != null) {
-            con.close();
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("Connection closed.");
             Platform.exit();
         }
@@ -110,16 +115,14 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException{
-        
-        PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
-        PreparedStatement addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
-        PreparedStatement checkIfArtistExists = con.prepareStatement("SELECT artistID from Artist where name = ? and nationality = ?");
-        PreparedStatement getAlbumID = con.prepareStatement("SELECT albumID from Album where name = ?");
-                
-        PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
-        
+    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
         try{
+            PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
+            PreparedStatement addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
+            PreparedStatement checkIfArtistExists = con.prepareStatement("SELECT artistID from Artist where name = ? and nationality = ?");
+            PreparedStatement getAlbumID = con.prepareStatement("SELECT albumID from Album where name = ?");
+            PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
+
             int artistID;
             int albumID;
             con.setAutoCommit(false);
@@ -164,11 +167,20 @@ public class MySQLConnection implements DBCommunication{
             con.commit();
             
         }catch(SQLException e){
-            if (con != null) con.rollback();
-            System.err.print("Transaction rollback");
-            throw e;
+            if (con != null) try {
+                con.rollback();
+                System.err.print("Transaction rollback");
+                throw e;
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
         }finally{
-            con.setAutoCommit(true);
+            try {
+                con.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     
     }
@@ -180,11 +192,11 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
+    public ArrayList<Object> getAlbumsByArtist(String name){
         ResultSet rs = null;
-        PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.* FROM Album, Album_Artist, Artist WHERE Album.albumID = "
-                + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
         try{
+            PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.* FROM Album, Album_Artist, Artist WHERE Album.albumID = "
+                    + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
             albumByArtist.clearParameters();
             albumByArtist.setString(1,name);
             
@@ -195,9 +207,16 @@ public class MySQLConnection implements DBCommunication{
                 list.add(album);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
     
     /**
@@ -207,10 +226,11 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Object> getAlbumByTitle(String name) throws SQLException{
+    public ArrayList<Object> getAlbumByTitle(String name){
         ResultSet rs = null;
-        PreparedStatement albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
+
         try{
+            PreparedStatement albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
             albumByName.clearParameters();
             albumByName.setString(1,name + "%");
             
@@ -221,9 +241,16 @@ public class MySQLConnection implements DBCommunication{
                 list.add(album);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
     
     /**
@@ -232,10 +259,11 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Genre> getGenre() throws SQLException{
+    public ArrayList<Genre> getGenre(){
         ResultSet rs = null;
-        PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
+
         try{
+            PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
             gradesPreStatement.clearParameters();
             
             rs = gradesPreStatement.executeQuery();
@@ -245,9 +273,16 @@ public class MySQLConnection implements DBCommunication{
                 list.add(genre);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
     
     /**
@@ -256,10 +291,10 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Grade> getGrades() throws SQLException{
+    public ArrayList<Grade> getGrades(){
         ResultSet rs = null;
-        PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
         try{
+            PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
             gradesPreStatement.clearParameters();
             
             rs = gradesPreStatement.executeQuery();
@@ -269,9 +304,16 @@ public class MySQLConnection implements DBCommunication{
                 list.add(grade);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
 
     /**
@@ -289,10 +331,10 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Object> getAlbumByGenre(int genre) throws SQLException {
+    public ArrayList<Object> getAlbumByGenre(int genre){
         ResultSet rs = null;
-        PreparedStatement genreByName = con.prepareStatement("SELECT * FROM Album WHERE genre = ?");
         try{
+            PreparedStatement genreByName = con.prepareStatement("SELECT * FROM Album WHERE genre = ?");
             genreByName.clearParameters();
             genreByName.setInt(1,genre);
             
@@ -303,9 +345,16 @@ public class MySQLConnection implements DBCommunication{
                 list.add(album);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
 
     /**
@@ -315,10 +364,10 @@ public class MySQLConnection implements DBCommunication{
      * @throws SQLException
      */
     @Override
-    public ArrayList<Object> getAlbumByGrade(int grade) throws SQLException {
+    public ArrayList<Object> getAlbumByGrade(int grade){
         ResultSet rs = null;
-        PreparedStatement gradeByName = con.prepareStatement("SELECT * FROM Album WHERE grade = ?");
         try{
+            PreparedStatement gradeByName = con.prepareStatement("SELECT * FROM Album WHERE grade = ?");
             gradeByName.clearParameters();
             gradeByName.setInt(1,grade);
             
@@ -329,8 +378,15 @@ public class MySQLConnection implements DBCommunication{
                 list.add(album);
             }
             return list;
-        }finally{
-            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
 }

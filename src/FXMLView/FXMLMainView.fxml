@@ -18,6 +18,12 @@
                   <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#handleCloseMenuItem" text="Close" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="MongoTests">
+              <items>
+                  <MenuItem fx:id="fillDbMenuItem" mnemonicParsing="false" onAction="#fillDbMenuItemHandle" text="Fill db" />
+                  <MenuItem fx:id="dropDbMenuItem" mnemonicParsing="false" onAction="#dropDbMenuItemHandle" text="Drop db" />
+              </items>
+            </Menu>
           <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
             <items>
               <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAboutMenuItem" text="About" />

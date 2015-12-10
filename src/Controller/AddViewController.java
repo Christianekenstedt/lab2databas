@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import model.MySQLConnection;
 import model.Genre;
 import model.Grade;
+import model.NoSQLConnection;
 
 /**
  * FXML Controller class
@@ -40,7 +41,7 @@ public class AddViewController implements Initializable {
     @FXML
     private Button addButton;
     
-    private MySQLConnection connection;
+    private NoSQLConnection connection;
     @FXML
     private TextField nationalityTextField;
 
@@ -80,7 +81,7 @@ public class AddViewController implements Initializable {
     
     }
     
-    public void initData(MySQLConnection connection){
+    public void initData(NoSQLConnection connection){
         this.connection = connection;
     }
     
@@ -88,18 +89,14 @@ public class AddViewController implements Initializable {
         new Thread(){
             @Override
             public void run(){
-                try {
-                    ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
-                    ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
-                    javafx.application.Platform.runLater(new Runnable(){
-                        @Override
-                        public void run(){
-                            updateUIComboBoxes(genres, grades);
-                        }
-                    });
-                } catch (SQLException ex) {
-                    Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
+                ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
+                javafx.application.Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        updateUIComboBoxes(genres, grades);
+                    }
+                });
             }
         }.start();
     }

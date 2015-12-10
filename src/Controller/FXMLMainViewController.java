@@ -32,9 +32,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.MySQLConnection;
-import model.Genre;
-import model.Grade;
+import model.*;
 
 /**
  * FXML Controller class
@@ -66,7 +64,8 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     private MenuItem addAlbumMenuItem;
     
-    private MySQLConnection connection;
+    //private MySQLConnection connection;
+    private NoSQLConnection connection;
     @FXML
     private ComboBox<Genre> genreComboBox;
     @FXML
@@ -75,8 +74,14 @@ public class FXMLMainViewController implements Initializable {
     private Button searchButtonCombo;
     @FXML
     private MenuItem closeMenuItem;
-    
-    
+    @FXML
+    private MenuItem fillDbMenuItem;
+    @FXML
+    private MenuItem dropDbMenuItem;
+
+
+
+
     /**
      * Initializes the controller class.
      */
@@ -114,22 +119,18 @@ public class FXMLMainViewController implements Initializable {
             new Thread(){
                     @Override
                     public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            if(finalSelect == 1){
-                                list = connection.getAlbumByTitle(searchField.getText());
-                            }else{
-                                list = connection.getAlbumsByArtist(searchField.getText());
-                            }
-                            Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, finalSelect);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        ArrayList<Object> list;
+                        if(finalSelect == 1){
+                            list = connection.getAlbumByTitle(searchField.getText());
+                        }else{
+                            list = connection.getAlbumsByArtist(searchField.getText());
                         }
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+                                updateUI(list, finalSelect);
+                            }
+                        });
                     }
                 }.start();
             
@@ -156,7 +157,7 @@ public class FXMLMainViewController implements Initializable {
         stage.showAndWait();
         }
     
-    public void initConnection(MySQLConnection connection){
+    public void initConnection(NoSQLConnection connection){
         this.connection = connection;
         connectedLabel.setTextFill(Color.GREEN);
         connectedLabel.setText("Connected as " + connection.getConnectedUser() + " to " + connection.getHost() + " --> " + connection.getDatabase());
@@ -195,36 +196,28 @@ public class FXMLMainViewController implements Initializable {
             new Thread(){
                     @Override
                     public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            list = connection.getAlbumByGrade(gradeComboBox.getValue().getGradeID());
-                            Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, 1);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        ArrayList<Object> list;
+                        list = connection.getAlbumByGrade(gradeComboBox.getValue().getGradeID());
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+                                updateUI(list, 1);
+                            }
+                        });
                     }
                 }.start();
         }else{
             new Thread(){
                     @Override
                     public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            list = connection.getAlbumByGenre(genreComboBox.getValue().getGenreID());
-                            Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, 1);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        ArrayList<Object> list;
+                        list = connection.getAlbumByGenre(genreComboBox.getValue().getGenreID());
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+                                updateUI(list, 1);
+                            }
+                        });
                     }
             }.start();
         }
@@ -246,18 +239,14 @@ public class FXMLMainViewController implements Initializable {
         new Thread(){
             @Override
             public void run(){
-                try {
-                    ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
-                    ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
-                    Platform.runLater(new Runnable(){
-                        @Override
-                        public void run(){
-                            updateUIComboBoxes(genres, grades);
-                        }
-                    });
-                } catch (SQLException ex) {
-                    Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
+                ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        updateUIComboBoxes(genres, grades);
+                    }
+                });
             }
         }.start();
     }
@@ -289,6 +278,18 @@ public class FXMLMainViewController implements Initializable {
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+    }
+
+    @FXML
+    public void fillDbMenuItemHandle(ActionEvent event){
+        CreateDB d = new CreateDB(connection.getDb());
+        d.createCollections();
+    }
+
+    @FXML
+    public void dropDbMenuItemHandle(ActionEvent event){
+        CreateDB d = new CreateDB(connection.getDb());
+        d.dropDatabase();
     }
     
 }
