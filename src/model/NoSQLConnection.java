@@ -2,6 +2,8 @@ package model;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -10,6 +12,7 @@ import org.bson.types.ObjectId;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chris on 2015-12-10.
@@ -38,9 +41,20 @@ public class NoSQLConnection implements DBCommunication{
     @Override
     public boolean connectToDatabase() {
 
-        client = new MongoClient("83.251.46.169");
-        db = client.getDatabase("medialibrary");
 
+        List<MongoCredential> credentials = new ArrayList<>();
+        List<ServerAddress> serverAdresses = new ArrayList<>();
+        serverAdresses.add(new ServerAddress("83.251.46.169"));
+        credentials.add(
+                MongoCredential.createCredential(
+                        "clientapp",
+                        "medialibrary",
+                        "1234567890".toCharArray()
+                )
+        );
+        client = new MongoClient(serverAdresses, credentials);
+
+        db = client.getDatabase("medialibrary");
 
 
         return true; //temp
@@ -53,7 +67,6 @@ public class NoSQLConnection implements DBCommunication{
 
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException {
-
 
     }
 
