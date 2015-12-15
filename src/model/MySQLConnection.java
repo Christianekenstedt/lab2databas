@@ -176,6 +176,14 @@ public class MySQLConnection implements DBCommunication{
             }
 
         }finally{
+
+            /*addAlbumPrepSt.close();
+            addArtistPrepSt
+            checkIfArtistExists
+            getAlbumID
+            addArtistToAlbumSt
+            */
+
             try {
                 con.setAutoCommit(true);
             } catch (SQLException e) {

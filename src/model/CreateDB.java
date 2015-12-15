@@ -1,16 +1,27 @@
 package model;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by chris on 2015-12-10.
  */
 public class CreateDB {
     private MongoDatabase db;
+    private MongoCollection album;
+    private MongoCollection artist;
+    private MongoCollection grade;
+    private MongoCollection genre;
+    private MongoCollection review;
+    private MongoCollection user;
+    private ArrayList<Document> genres = new ArrayList<>();
+    private ArrayList<Document> grades = new ArrayList<>();
+
     public CreateDB(MongoDatabase db) {
         //Fill the database, probably only one-time-use
         this.db = db;
@@ -19,31 +30,32 @@ public class CreateDB {
     }
 
     public void createCollections() {
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy/mm/dd");
 
+        album = db.getCollection("album");
+        artist = db.getCollection("artist");
+        grade = db.getCollection("grade");
+        genre = db.getCollection("genre");
+        review = db.getCollection("review");
+        user = db.getCollection("user");
+
+
+        genres.add(new Document("name", "Rock"));genres.add(new Document("name", "Pop"));genres.add(new Document("name", "Dance"));genres.add(new Document("name", "Reggae"));genres.add(new Document("name", "RnB"));
+        grades.add(new Document("name", "Bad")); new Document("name", "Meh"); new Document("name", "Okay");new Document("name", "Good");new Document("name", "Very good");
+
+        genre.insertMany(genres);
+        grade.insertMany(grades);
+
         try {
-            db.getCollection("album").insertOne(
-                    new Document("name","Thriller")
-                            .append("ReleaseDate",format.parse("2002/01/01"))
-                            .append("genre","rock")
-                            .append("grade","very good")
-            );
+            album.insertOne(
+                new Document("name","Thriller")
+                        .append("ReleaseDate",format.parse("2002/01/01"))
+                        .append("genre","rock")
+                        .append("grade","very good"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        db.getCollection("artist").insertOne(new Document("name", "Michael Jackson").append("Nationality", "USA"));
-
-        db.getCollection("genre").insertOne(new Document("name", "Rock"));
-        db.getCollection("grade").insertOne(new Document("name", "Bad"));
-        db.getCollection("grade").insertOne(new Document("name", "Good"));
-        db.getCollection("grade").insertOne(new Document("name", "Very good"));
-        db.createCollection("grade");
-        db.createCollection("review");
-        db.createCollection("user");
-
-
+        artist.insertOne(new Document("name", "Michael Jackson").append("Nationality", "USA"));
 
     }
 
