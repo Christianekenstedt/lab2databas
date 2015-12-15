@@ -38,7 +38,7 @@ public class NoSQLConnection implements DBCommunication{
     @Override
     public boolean connectToDatabase() {
 
-        client = new MongoClient("192.168.0.4");
+        client = new MongoClient("83.251.46.169");
         db = client.getDatabase("medialibrary");
 
 
@@ -171,6 +171,6 @@ public class NoSQLConnection implements DBCommunication{
     }
 
     public String getUsername() {
-        return getUsername();
+        return user;
     }
 }
