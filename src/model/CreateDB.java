@@ -1,24 +1,10 @@
 package model;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
-import com.mongodb.MongoURI;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import org.bson.BsonDateTime;
-import org.bson.BsonDocument;
 import org.bson.Document;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
-
-import static java.util.Arrays.asList;
 
 /**
  * Created by chris on 2015-12-10.
@@ -38,8 +24,8 @@ public class CreateDB {
 
         try {
             db.getCollection("album").insertOne(
-                    new Document("name","Jack Black")
-                            .append("ReleaseDate",format.parse("2006/01/01"))
+                    new Document("name","Thriller")
+                            .append("ReleaseDate",format.parse("2002/01/01"))
                             .append("genre","rock")
                             .append("grade","very good")
             );
@@ -47,12 +33,15 @@ public class CreateDB {
             e.printStackTrace();
         }
 
-        db.createCollection("artist");
-        db.createCollection("genre");
+        db.getCollection("artist").insertOne(new Document("name", "Michael Jackson").append("Nationality", "USA"));
+
+        db.getCollection("genre").insertOne(new Document("name", "Rock"));
+        db.getCollection("grade").insertOne(new Document("name", "Bad"));
+        db.getCollection("grade").insertOne(new Document("name", "Good"));
+        db.getCollection("grade").insertOne(new Document("name", "Very good"));
         db.createCollection("grade");
         db.createCollection("review");
         db.createCollection("user");
-
 
 
 
