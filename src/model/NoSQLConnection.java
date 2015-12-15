@@ -1,7 +1,9 @@
 package model;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -64,12 +66,30 @@ public class NoSQLConnection implements DBCommunication{
 
     @Override
     public ArrayList<Genre> getGenre() {
-        return null;
+        MongoCursor<Document> cursor = db.getCollection("genre").find().iterator();
+        ArrayList<Genre> list = new ArrayList<>();
+        Document result = null;
+        while(cursor.hasNext()){
+            result = cursor.next();
+            Genre g = new Genre(1, result.getString("name"));
+            list.add(g);
+        }
+        System.out.println(list);
+        return list;
     }
 
     @Override
     public ArrayList<Grade> getGrades() {
-        return null;
+        MongoCursor<Document> cursor = db.getCollection("grade").find().iterator();
+        ArrayList<Grade> list = new ArrayList<>();
+        Document result = null;
+        while(cursor.hasNext()){
+            result = cursor.next();
+            Grade g = new Grade(1, result.getString("name"));
+            list.add(g);
+        }
+        System.out.println(list);
+        return list;
     }
 
     @Override

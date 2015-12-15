@@ -50,7 +50,7 @@ public class CreateDB {
 
 
         genres.add(new Document("name", "Rock"));genres.add(new Document("name", "Pop"));genres.add(new Document("name", "Dance"));genres.add(new Document("name", "Reggae"));genres.add(new Document("name", "RnB"));
-        grades.add(new Document("name", "Bad")); new Document("name", "Meh"); new Document("name", "Okay");new Document("name", "Good");new Document("name", "Very good");
+        grades.add(new Document("name", "Bad")); grades.add(new Document("name", "Meh")); grades.add(new Document("name", "Okay"));grades.add(new Document("name", "Good"));grades.add(new Document("name", "Very good"));
 
         genre.insertMany(genres);
         grade.insertMany(grades);
