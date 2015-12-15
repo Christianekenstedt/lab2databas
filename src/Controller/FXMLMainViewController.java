@@ -97,7 +97,7 @@ public class FXMLMainViewController implements Initializable {
         
     }    
     
-    private void disconnectButtonHandle(ActionEvent event) throws SQLException {
+    private void disconnectButtonHandle(ActionEvent event) throws IOException {
         connection.closeConnection();
     }
     
@@ -110,7 +110,7 @@ public class FXMLMainViewController implements Initializable {
     }
 
     @FXML
-    private void handleSearchButn(ActionEvent event) throws SQLException {
+    private void handleSearchButn(ActionEvent event) throws IOException {
         if(!searchField.getText().isEmpty()){
             int selection = 0;
             if(searchComboBox.getValue().equals("Get Album by Title")) selection = 1;
@@ -138,7 +138,7 @@ public class FXMLMainViewController implements Initializable {
     }
     
     @FXML
-    public void addAlbumHandle(ActionEvent event) throws IOException, SQLException {
+    public void addAlbumHandle(ActionEvent event) throws IOException, IOException {
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Parent root = loader.load();
@@ -165,6 +165,7 @@ public class FXMLMainViewController implements Initializable {
     
     public void updateUI(ArrayList<Object> inputList, int select){
             if(select == 1){ // 1 = AlbumByTitle
+
                 ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
                 table.getColumns().clear();
                 TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
@@ -191,7 +192,7 @@ public class FXMLMainViewController implements Initializable {
     }
 
     @FXML
-    private void handleButtonCombo(ActionEvent event) throws SQLException {
+    private void handleButtonCombo(ActionEvent event) throws IOException {
         if(gradeComboBox.getValue() != null){
             new Thread(){
                     @Override
@@ -224,18 +225,18 @@ public class FXMLMainViewController implements Initializable {
     }
 
     @FXML
-    private void genreBoxClicked(MouseEvent event) throws SQLException {
+    private void genreBoxClicked(MouseEvent event) throws IOException {
         updateComboBoxes();
         gradeComboBox.getSelectionModel().clearSelection();
     }
 
     @FXML
-    private void gradeBoxClicked(MouseEvent event) throws SQLException {
+    private void gradeBoxClicked(MouseEvent event) throws IOException {
         updateComboBoxes();
         genreComboBox.getSelectionModel().clearSelection();
     }
     
-    private void updateComboBoxes() throws SQLException{
+    private void updateComboBoxes() throws IOException{
         new Thread(){
             @Override
             public void run(){
@@ -257,7 +258,7 @@ public class FXMLMainViewController implements Initializable {
     }
     
     @FXML
-    private void handleCloseMenuItem(ActionEvent event) throws SQLException {
+    private void handleCloseMenuItem(ActionEvent event) throws IOException {
         connection.closeConnection();
         Platform.exit();
     }

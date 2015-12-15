@@ -1,5 +1,6 @@
 package Controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -54,7 +55,7 @@ public class AddViewController implements Initializable {
     }    
 
     @FXML
-    private void addButtonHandle(ActionEvent event) throws SQLException{
+    private void addButtonHandle(ActionEvent event) throws IOException{
         String title = titleTextField.getText();
         String artist = artistTextField.getText();
         LocalDate date = datePicker.getValue();
@@ -85,7 +86,7 @@ public class AddViewController implements Initializable {
         this.connection = connection;
     }
     
-    public void updateComboBoxes() throws SQLException{
+    public void updateComboBoxes() throws IOException {
         new Thread(){
             @Override
             public void run(){
