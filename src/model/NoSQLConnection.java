@@ -54,6 +54,7 @@ public class NoSQLConnection implements DBCommunication{
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException {
 
+
     }
 
     @Override
