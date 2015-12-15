@@ -17,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import model.MySQLConnection;
 import model.Genre;
 import model.Grade;
 import model.NoSQLConnection;

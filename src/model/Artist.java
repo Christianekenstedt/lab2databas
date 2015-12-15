@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
  */
 public class Artist implements Serializable {
 
-    private Integer artistID;
+    private ObjectId artistID;
     private String name;
     private String nationality;
 
@@ -22,7 +24,7 @@ public class Artist implements Serializable {
      * Recives integer with artistID
      * @param artistID
      */
-    public Artist(Integer artistID) {
+    public Artist(ObjectId artistID) {
         this.artistID = artistID;
     }
 
@@ -32,7 +34,7 @@ public class Artist implements Serializable {
      * @param name
      * @param nationality
      */
-    public Artist(Integer artistID, String name, String nationality) {
+    public Artist(ObjectId artistID, String name, String nationality) {
         this.artistID = artistID;
         this.name = name;
         this.nationality = nationality;
@@ -42,7 +44,7 @@ public class Artist implements Serializable {
      * returns the artist's ID in integer
      * @return
      */
-    public Integer getArtistID() {
+    public ObjectId getArtistID() {
         return artistID;
     }
 
@@ -50,7 +52,7 @@ public class Artist implements Serializable {
      * set's the artist ID, recives integer
      * @param artistID
      */
-    public void setArtistID(Integer artistID) {
+    public void setArtistID(ObjectId artistID) {
         this.artistID = artistID;
     }
 

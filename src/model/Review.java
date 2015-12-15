@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  */
 public class Review implements Serializable {
 
-    private Integer reviewID;
+    private ObjectId reviewID;
     private String text;
     private Album album;
     private TUser user;
@@ -19,7 +21,7 @@ public class Review implements Serializable {
      *
      * @param reviewID
      */
-    public Review(Integer reviewID) {
+    public Review(ObjectId reviewID) {
         this.reviewID = reviewID;
     }
 
@@ -28,7 +30,7 @@ public class Review implements Serializable {
      *
      * @return the unique id of the Review.
      */
-    public Integer getReviewID() {
+    public ObjectId getReviewID() {
         return reviewID;
     }
 
@@ -37,7 +39,7 @@ public class Review implements Serializable {
      *
      * @param reviewID
      */
-    public void setReviewID(Integer reviewID) {
+    public void setReviewID(ObjectId reviewID) {
         this.reviewID = reviewID;
     }
 

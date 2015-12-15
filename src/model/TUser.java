@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  */
 public class TUser implements Serializable {
 
-    private Integer userID;
+    private ObjectId userID;
     private String name;
 
     /**
@@ -17,7 +19,7 @@ public class TUser implements Serializable {
      *
      * @param userID, unique id for the user.
      */
-    public TUser(Integer userID) {
+    public TUser(ObjectId userID) {
         this.userID = userID;
     }
 
@@ -26,7 +28,7 @@ public class TUser implements Serializable {
      *
      * @return th userID.
      */
-    public Integer getUserID() {
+    public ObjectId getUserID() {
         return userID;
     }
 
@@ -35,7 +37,7 @@ public class TUser implements Serializable {
      *
      * @param userID, the userID to be set.
      */
-    public void setUserID(Integer userID) {
+    public void setUserID(ObjectId userID) {
         this.userID = userID;
     }
 

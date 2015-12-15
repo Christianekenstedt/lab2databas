@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -13,7 +15,7 @@ import java.util.Collection;
 public class Grade implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer gradeID;
+    private ObjectId gradeID;
     private String name;
     private Collection<Album> albumCollection;
 
@@ -22,7 +24,7 @@ public class Grade implements Serializable {
      *
      * @param gradeID
      */
-    public Grade(Integer gradeID) {
+    public Grade(ObjectId gradeID) {
         this.gradeID = gradeID;
     }
 
@@ -32,7 +34,7 @@ public class Grade implements Serializable {
      * @param gradeID
      * @param name
      */
-    public Grade(Integer gradeID, String name) {
+    public Grade(ObjectId gradeID, String name) {
         this.gradeID = gradeID;
         this.name = name;
     }
@@ -42,7 +44,7 @@ public class Grade implements Serializable {
      *
      * @return
      */
-    public Integer getGradeID() {
+    public ObjectId getGradeID() {
         return gradeID;
     }
 
@@ -51,7 +53,7 @@ public class Grade implements Serializable {
      *
      * @param gradeID
      */
-    public void setGradeID(Integer gradeID) {
+    public void setGradeID(ObjectId gradeID) {
         this.gradeID = gradeID;
     }
 

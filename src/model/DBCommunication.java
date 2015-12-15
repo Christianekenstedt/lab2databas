@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumByGenre(int genre);
+    public ArrayList<Object> getAlbumByGenre(ObjectId genre);
 
     /**
      *
@@ -69,5 +71,5 @@ public interface DBCommunication {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Object> getAlbumByGrade(int grade);
+    public ArrayList<Object> getAlbumByGrade(ObjectId grade);
 }   

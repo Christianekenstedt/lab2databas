@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -9,7 +11,7 @@ import java.util.Collection;
  */
 public class Genre implements Serializable {
 
-    private Integer genreID;
+    private ObjectId genreID;
     private String name;
     private Collection<Album> albumCollection;
 
@@ -17,7 +19,7 @@ public class Genre implements Serializable {
      * constructor reciving the genre ID
      * @param genreID
      */
-    public Genre(Integer genreID) {
+    public Genre(ObjectId genreID) {
         this.genreID = genreID;
     }
 
@@ -26,7 +28,7 @@ public class Genre implements Serializable {
      * @param genreID
      * @param name
      */
-    public Genre(Integer genreID, String name) {
+    public Genre(ObjectId genreID, String name) {
         this.genreID = genreID;
         this.name = name;
     }
@@ -35,7 +37,7 @@ public class Genre implements Serializable {
      * get's the genreID in integer
      * @return
      */
-    public Integer getGenreID() {
+    public ObjectId getGenreID() {
         return genreID;
     }
 
@@ -43,7 +45,7 @@ public class Genre implements Serializable {
      * set's the genreID with integer
      * @param genreID 
      */
-    public void setGenreID(Integer genreID) {
+    public void setGenreID(ObjectId genreID) {
         this.genreID = genreID;
     }
 

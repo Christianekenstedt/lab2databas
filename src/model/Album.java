@@ -1,5 +1,7 @@
 package model;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,7 +12,7 @@ import java.util.Date;
  */
 public class Album implements Serializable {
 
-    private Integer albumID;
+    private ObjectId albumID;
     private String name;
     private Date releaseDate;
     private Genre genre;
@@ -21,7 +23,7 @@ public class Album implements Serializable {
      *
      * @param albumID, a unique integer
      */
-    public Album(Integer albumID) {
+    public Album(ObjectId albumID) {
         this.albumID = albumID;
     }
 
@@ -32,7 +34,7 @@ public class Album implements Serializable {
      * @param name
      * @param releaseDate
      */
-    public Album(Integer albumID, String name, Date releaseDate) {
+    public Album(ObjectId albumID, String name, Date releaseDate) {
         this.albumID = albumID;
         this.name = name;
         this.releaseDate = releaseDate;
@@ -43,7 +45,7 @@ public class Album implements Serializable {
      *
      * @return
      */
-    public Integer getAlbumID() {
+    public ObjectId getAlbumID() {
         return albumID;
     }
 
@@ -52,7 +54,7 @@ public class Album implements Serializable {
      *
      * @param albumID
      */
-    public void setAlbumID(Integer albumID) {
+    public void setAlbumID(ObjectId albumID) {
         this.albumID = albumID;
     }
 

@@ -1,11 +1,14 @@
 package model;
 
+import com.mongodb.BulkWriteUpsert;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.InsertOneOptions;
+import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -48,6 +51,9 @@ public class CreateDB {
         user = db.getCollection("user");
         albumArtist = db.getCollection("album_artist");
 
+        UpdateOptions u = new UpdateOptions().upsert(true);
+
+
 
         genres.add(new Document("name", "Rock"));genres.add(new Document("name", "Pop"));genres.add(new Document("name", "Dance"));genres.add(new Document("name", "Reggae"));genres.add(new Document("name", "RnB"));
         grades.add(new Document("name", "Bad")); grades.add(new Document("name", "Meh")); grades.add(new Document("name", "Okay"));grades.add(new Document("name", "Good"));grades.add(new Document("name", "Very good"));
@@ -59,17 +65,30 @@ public class CreateDB {
 
 
         MongoCursor<Document> cursor = artist.find(new Document("name", "Michael Jackson")).iterator();
-        Document doc = null;
+        Document docId = null;
         while(cursor.hasNext()){
-             doc = cursor.next();
+             docId = cursor.next();
         }
+        cursor = genre.find(new Document("name", "Rock")).iterator();
+        Document docGenre = null;
+        while(cursor.hasNext()){
+            docGenre = cursor.next();
+        }
+
+        cursor = grade.find(new Document("name", "Very good")).iterator();
+        Document docGrade = null;
+        while(cursor.hasNext()){
+            docGrade = cursor.next();
+        }
+
+
 
         try {
             album.insertOne(
-                new Document("name","Thriller").append("artist", doc.get("_id"))
+                new Document("name","Thriller").append("artist", docId.get("_id"))
                         .append("ReleaseDate",format.parse("2002/01/01"))
-                        .append("genre","rock")
-                        .append("grade","very good"));
+                        .append("genre",docGenre.getObjectId("_id"))
+                        .append("grade",docGrade.getObjectId("_id")));
         } catch (ParseException e) {
             e.printStackTrace();
         }
