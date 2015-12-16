@@ -26,11 +26,8 @@ public class NoSQLConnection implements DBCommunication{
     private String host;
     private String database;
     private MongoDatabase db;
-    MongoClient client;
-
+    private MongoClient client;
     private MongoCursor<Document> cursor =  null;
-
-
     public NoSQLConnection(){
 
     }
