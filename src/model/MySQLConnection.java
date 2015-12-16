@@ -22,7 +22,27 @@ public class MySQLConnection implements DBCommunication{
     private String password;
     private String host;
     private String database;
-       
+
+
+
+    PreparedStatement addAlbumPrepSt = null;
+    PreparedStatement addArtistPrepSt = null;
+    PreparedStatement checkIfArtistExists = null;
+    PreparedStatement getAlbumID = null;
+    PreparedStatement addArtistToAlbumSt = null;
+
+    PreparedStatement albumByArtist = null;
+
+    PreparedStatement albumByName = null;
+
+    PreparedStatement gradesPreStatement = null;
+
+    PreparedStatement genreByName = null;
+
+    PreparedStatement gradeByName = null;
+
+
+
     /**
      * 
      * @param host, the address for the server
@@ -117,11 +137,11 @@ public class MySQLConnection implements DBCommunication{
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
         try{
-            PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
-            PreparedStatement addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
-            PreparedStatement checkIfArtistExists = con.prepareStatement("SELECT artistID from Artist where name = ? and nationality = ?");
-            PreparedStatement getAlbumID = con.prepareStatement("SELECT albumID from Album where name = ?");
-            PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
+            addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
+            addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
+            checkIfArtistExists = con.prepareStatement("SELECT artistID from Artist where name = ? and nationality = ?");
+            getAlbumID = con.prepareStatement("SELECT albumID from Album where name = ?");
+            addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
 
             int artistID;
             int albumID;
@@ -162,8 +182,7 @@ public class MySQLConnection implements DBCommunication{
             addArtistToAlbumSt.execute();
             
             }
-            
-            
+
             con.commit();
             
         }catch(SQLException e){
@@ -177,12 +196,11 @@ public class MySQLConnection implements DBCommunication{
 
         }finally{
 
-            /*addAlbumPrepSt.close();
-            addArtistPrepSt
-            checkIfArtistExists
-            getAlbumID
-            addArtistToAlbumSt
-            */
+            try { if (addAlbumPrepSt != null) addAlbumPrepSt.close(); } catch (Exception e) {e.printStackTrace();}
+            try { if (addArtistPrepSt != null) addArtistPrepSt.close(); } catch (Exception e) {e.printStackTrace();}
+            try { if (checkIfArtistExists != null) checkIfArtistExists.close(); } catch (Exception e) {e.printStackTrace();}
+            try { if (getAlbumID != null) getAlbumID.close(); } catch (Exception e) {e.printStackTrace();}
+            try { if (addArtistToAlbumSt != null) addArtistToAlbumSt.close(); } catch (Exception e) {e.printStackTrace();}
 
             try {
                 con.setAutoCommit(true);
@@ -203,7 +221,7 @@ public class MySQLConnection implements DBCommunication{
     public ArrayList<Object> getAlbumsByArtist(String name){
         ResultSet rs = null;
         try{
-            PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.* FROM Album, Album_Artist, Artist WHERE Album.albumID = "
+             albumByArtist = con.prepareStatement("SELECT Album.* FROM Album, Album_Artist, Artist WHERE Album.albumID = "
                     + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
             albumByArtist.clearParameters();
             albumByArtist.setString(1,name);
@@ -218,6 +236,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (albumByArtist != null) albumByArtist.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -238,7 +259,7 @@ public class MySQLConnection implements DBCommunication{
         ResultSet rs = null;
 
         try{
-            PreparedStatement albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
+            albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
             albumByName.clearParameters();
             albumByName.setString(1,name + "%");
             
@@ -252,6 +273,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (albumByName != null) albumByName.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -271,7 +295,7 @@ public class MySQLConnection implements DBCommunication{
         ResultSet rs = null;
 
         try{
-            PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
+            gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
             gradesPreStatement.clearParameters();
             
             rs = gradesPreStatement.executeQuery();
@@ -284,6 +308,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (gradesPreStatement != null) gradesPreStatement.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -302,7 +329,7 @@ public class MySQLConnection implements DBCommunication{
     public ArrayList<Grade> getGrades(){
         ResultSet rs = null;
         try{
-            PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
+            gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
             gradesPreStatement.clearParameters();
             
             rs = gradesPreStatement.executeQuery();
@@ -315,6 +342,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (gradesPreStatement != null) gradesPreStatement.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -342,7 +372,7 @@ public class MySQLConnection implements DBCommunication{
     public ArrayList<Object> getAlbumByGenre(int genre){
         ResultSet rs = null;
         try{
-            PreparedStatement genreByName = con.prepareStatement("SELECT * FROM Album WHERE genre = ?");
+            genreByName = con.prepareStatement("SELECT * FROM Album WHERE genre = ?");
             genreByName.clearParameters();
             genreByName.setInt(1,genre);
             
@@ -356,6 +386,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (genreByName != null) genreByName.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -375,7 +408,7 @@ public class MySQLConnection implements DBCommunication{
     public ArrayList<Object> getAlbumByGrade(int grade){
         ResultSet rs = null;
         try{
-            PreparedStatement gradeByName = con.prepareStatement("SELECT * FROM Album WHERE grade = ?");
+            gradeByName = con.prepareStatement("SELECT * FROM Album WHERE grade = ?");
             gradeByName.clearParameters();
             gradeByName.setInt(1,grade);
             
@@ -389,6 +422,9 @@ public class MySQLConnection implements DBCommunication{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
+
+            try { if (gradeByName != null) gradeByName.close(); } catch (Exception e) {e.printStackTrace();}
+
             try {
                 rs.close();
             } catch (SQLException e) {
