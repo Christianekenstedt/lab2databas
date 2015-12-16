@@ -68,6 +68,7 @@ public class NoSQLConnection implements DBCommunication{
 
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
+        // TODO
         //kontrollera ifall artisten redan finns.
         db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
         MongoCursor<Document> cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
