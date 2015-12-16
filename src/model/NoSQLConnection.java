@@ -69,11 +69,8 @@ public class NoSQLConnection implements DBCommunication{
 
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
-        // TODO
-        //kontrollera ifall artisten redan finns.
         MongoCursor<Document> cursor =  db.getCollection("artist").find(Filters.and(Filters.eq("name", artist), Filters.eq("nationality", nationality))).iterator();
         Document docId = null;
-
         if(!cursor.hasNext()){
             System.out.println("finns inte");
             db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
@@ -87,9 +84,8 @@ public class NoSQLConnection implements DBCommunication{
         }
 
         System.out.println(docId.getString("name"));
-
-        // Hämta artisten som vi precis la till.
         db.getCollection("album").insertOne(new Document("name", title).append("artist", docId.getObjectId("_id")).append("ReleaseDate", date).append("genre", genre.getGenreID()).append("grade", grade.getGradeID())); //här behöver vi fixa genreid och genrenamn
+        
     }
 
     @Override

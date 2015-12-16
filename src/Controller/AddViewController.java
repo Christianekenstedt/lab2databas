@@ -70,9 +70,7 @@ public class AddViewController implements Initializable {
             Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
             new Thread(){
                 @Override
-                public void run(){
-                        connection.addAlbum(title, artist, nationality, d, genre, grade);
-                }
+                public void run(){ connection.addAlbum(title, artist, nationality, d, genre, grade);}
             }.start();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
