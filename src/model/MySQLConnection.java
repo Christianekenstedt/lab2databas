@@ -25,21 +25,21 @@ public class MySQLConnection implements DBCommunication{
 
 
 
-    PreparedStatement addAlbumPrepSt = null;
-    PreparedStatement addArtistPrepSt = null;
-    PreparedStatement checkIfArtistExists = null;
-    PreparedStatement getAlbumID = null;
-    PreparedStatement addArtistToAlbumSt = null;
+    private PreparedStatement addAlbumPrepSt = null;
+    private PreparedStatement addArtistPrepSt = null;
+    private PreparedStatement checkIfArtistExists = null;
+    private PreparedStatement getAlbumID = null;
+    private PreparedStatement addArtistToAlbumSt = null;
 
-    PreparedStatement albumByArtist = null;
+    private PreparedStatement albumByArtist = null;
 
-    PreparedStatement albumByName = null;
+    private PreparedStatement albumByName = null;
 
-    PreparedStatement gradesPreStatement = null;
+    private PreparedStatement gradesPreStatement = null;
 
-    PreparedStatement genreByName = null;
+    private PreparedStatement genreByName = null;
 
-    PreparedStatement gradeByName = null;
+    private PreparedStatement gradeByName = null;
 
 
 

@@ -28,6 +28,9 @@ public class NoSQLConnection implements DBCommunication{
     private MongoDatabase db;
     MongoClient client;
 
+    private MongoCursor<Document> cursor =  null;
+
+
     public NoSQLConnection(){
 
     }
@@ -69,125 +72,169 @@ public class NoSQLConnection implements DBCommunication{
 
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
-        MongoCursor<Document> cursor =  db.getCollection("artist").find(Filters.and(Filters.eq("name", artist), Filters.eq("nationality", nationality))).iterator();
-        Document docId = null;
-        if(!cursor.hasNext()){
-            System.out.println("finns inte");
-            db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
-            cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
 
-            System.out.println(db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).toString());
+        try{
+            cursor =  db.getCollection("artist").find(Filters.and(Filters.eq("name", artist), Filters.eq("nationality", nationality))).iterator();
+            Document docId = null;
+            if(!cursor.hasNext()){
+                System.out.println("finns inte");
+                db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
+                cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
+
+                System.out.println(db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).toString());
+            }
+
+            while(cursor.hasNext()){
+                docId = cursor.next();
+            }
+
+            System.out.println(docId.getString("name"));
+            db.getCollection("album").insertOne(new Document("name", title).append("artist", docId.getObjectId("_id")).append("ReleaseDate", date).append("genre", genre.getGenreID()).append("grade", grade.getGradeID())); //här behöver vi fixa genreid och genrenamn
+
+        }finally{
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
+
         }
 
-        while(cursor.hasNext()){
-           docId = cursor.next();
-        }
-
-        System.out.println(docId.getString("name"));
-        db.getCollection("album").insertOne(new Document("name", title).append("artist", docId.getObjectId("_id")).append("ReleaseDate", date).append("genre", genre.getGenreID()).append("grade", grade.getGradeID())); //här behöver vi fixa genreid och genrenamn
 
     }
 
     @Override
     public ArrayList<Object> getAlbumsByArtist(String name){
-        ArrayList<Object> list = new ArrayList<>();
-        Document result;
-        Document docId = null;
 
-        MongoCursor<Document> cursor = db.getCollection("artist").find(new Document("name", new BasicDBObject("$regex",name))).iterator();
-        while(cursor.hasNext()){
-            docId = cursor.next();
+        try{
+            ArrayList<Object> list = new ArrayList<>();
+            Document result;
+            Document docId = null;
+
+            cursor = db.getCollection("artist").find(new Document("name", new BasicDBObject("$regex",name))).iterator();
+            while(cursor.hasNext()){
+                docId = cursor.next();
+            }
+
+
+            if(docId != null){
+                cursor = db.getCollection("album").find(new Document("artist", docId.getObjectId("_id"))).iterator();
+                while(cursor.hasNext()){
+                    result = cursor.next();
+                    Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
+                    list.add(a);
+                }
+            }
+
+            System.out.println(list);
+
+            return list;
+        }finally{
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
+
         }
 
+    }
 
-        if(docId != null){
-            cursor = db.getCollection("album").find(new Document("artist", docId.getObjectId("_id"))).iterator();
+    @Override
+    public ArrayList<Object> getAlbumByTitle(String name) {
+
+        try{
+            cursor = db.getCollection("album").find(new Document("name", new BasicDBObject("$regex",name))).iterator();
+            ArrayList<Object> list = new ArrayList<>();
+            Document result;
             while(cursor.hasNext()){
                 result = cursor.next();
                 Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
                 list.add(a);
             }
+            System.out.println(list);
+            return list;
+        }finally {
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
         }
-
-        System.out.println(list);
-
-        return list;
-    }
-
-    @Override
-    public ArrayList<Object> getAlbumByTitle(String name) {
-        MongoCursor<Document> cursor = db.getCollection("album").find(new Document("name", new BasicDBObject("$regex",name))).iterator();
-        ArrayList<Object> list = new ArrayList<>();
-        Document result;
-        while(cursor.hasNext()){
-            result = cursor.next();
-            Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
-            list.add(a);
-        }
-        System.out.println(list);
-        return list;
     }
 
     @Override
     public ArrayList<Genre> getGenre() {
-        MongoCursor<Document> cursor = db.getCollection("genre").find().iterator();
-        ArrayList<Genre> list = new ArrayList<>();
-        Document result;
 
-        while(cursor.hasNext()){
-            result = cursor.next();
-            Genre g = new Genre(result.getObjectId("_id"), result.getString("name"));
-            list.add(g);
+        try{
+            cursor = db.getCollection("genre").find().iterator();
+            ArrayList<Genre> list = new ArrayList<>();
+            Document result;
+
+            while(cursor.hasNext()){
+                result = cursor.next();
+                Genre g = new Genre(result.getObjectId("_id"), result.getString("name"));
+                list.add(g);
+            }
+            System.out.println(list);
+            return list;
+        }finally {
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
         }
-        System.out.println(list);
-        return list;
+
     }
 
     @Override
     public ArrayList<Grade> getGrades() {
-        MongoCursor<Document> cursor = db.getCollection("grade").find().iterator();
-        ArrayList<Grade> list = new ArrayList<>();
-        Document result;
-        while(cursor.hasNext()){
 
-            result = cursor.next();
-            Grade g = new Grade(result.getObjectId("_id"), result.getString("name"));
-            list.add(g);
+
+        try{
+            cursor = db.getCollection("grade").find().iterator();
+            ArrayList<Grade> list = new ArrayList<>();
+            Document result;
+            while(cursor.hasNext()){
+
+                result = cursor.next();
+                Grade g = new Grade(result.getObjectId("_id"), result.getString("name"));
+                list.add(g);
+            }
+            System.out.println(list);
+            return list;
+        }finally {
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
         }
-        System.out.println(list);
-        return list;
+
     }
 
     @Override
     public ArrayList<Object> getAlbumByGenre(ObjectId genre) {
-        ArrayList<Object> list = new ArrayList<>();
-        Document result;
-        MongoCursor<Document> cursor = db.getCollection("album").find(new Document("genre", genre)).iterator();
 
-        while(cursor.hasNext()){
-            result = cursor.next();
-            Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
-            list.add(a);
+        try{
+            ArrayList<Object> list = new ArrayList<>();
+            Document result;
+            cursor = db.getCollection("album").find(new Document("genre", genre)).iterator();
+
+            while(cursor.hasNext()){
+                result = cursor.next();
+                Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
+                list.add(a);
+            }
+
+            System.out.println(list);
+            return list;
+        }finally {
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
         }
-
-        System.out.println(list);
-        return list;
     }
 
     @Override
     public ArrayList<Object> getAlbumByGrade(ObjectId grade) {
-        ArrayList<Object> list = new ArrayList<>();
-        Document result;
-        MongoCursor<Document> cursor = db.getCollection("album").find(new Document("grade", grade)).iterator();
 
-        while(cursor.hasNext()){
-            result = cursor.next();
-            Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
-            list.add(a);
+
+        try{
+            ArrayList<Object> list = new ArrayList<>();
+            Document result;
+            cursor = db.getCollection("album").find(new Document("grade", grade)).iterator();
+
+            while(cursor.hasNext()){
+                result = cursor.next();
+                Album a = new Album(result.getObjectId("_id"), result.getString("name"), result.getDate("ReleaseDate"));
+                list.add(a);
+            }
+
+            System.out.println(list);
+            return list;
+        }finally {
+            try { if (cursor != null) cursor.close(); } catch (Exception e) {e.printStackTrace();}
         }
-
-        System.out.println(list);
-        return list;
     }
 
     public String getConnectedUser() {
