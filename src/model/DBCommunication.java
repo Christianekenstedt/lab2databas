@@ -27,6 +27,8 @@ public interface DBCommunication {
      */
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade);
 
+    //void addAlbum(String title, String artist, String nationality, java.sql.Date date, Genre genre, Grade grade);
+
     /**
      * 
      * @param name
