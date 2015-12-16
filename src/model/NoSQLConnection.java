@@ -85,7 +85,7 @@ public class NoSQLConnection implements DBCommunication{
 
         System.out.println(docId.getString("name"));
         db.getCollection("album").insertOne(new Document("name", title).append("artist", docId.getObjectId("_id")).append("ReleaseDate", date).append("genre", genre.getGenreID()).append("grade", grade.getGradeID())); //här behöver vi fixa genreid och genrenamn
-        
+
     }
 
     @Override

@@ -166,25 +166,25 @@ public class FXMLMainViewController implements Initializable {
 
                 ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
                 table.getColumns().clear();
-                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
-                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+                //TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+                //cID.setCellValueFactory(new PropertyValueFactory("albumID"));
                 TableColumn<Object, String> cName = new TableColumn<>("Title");
                 cName.setCellValueFactory(new PropertyValueFactory("name"));
                 TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
                 cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-                table.getColumns().addAll(cID,cName,cDate);
+                table.getColumns().addAll(/*cID,*/cName,cDate);
                 table.setItems(list);
                 
             }else if (select == 2){ // AlbumsByArtist
                 ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
                 table.getColumns().clear();
-                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
-                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+                //TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+                //cID.setCellValueFactory(new PropertyValueFactory("albumID"));
                 TableColumn<Object, String> cName = new TableColumn<>("Title");
                 cName.setCellValueFactory(new PropertyValueFactory("name"));
                 TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
                 cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-                table.getColumns().addAll(cID,cName,cDate);
+                table.getColumns().addAll(/*cID,*/cName,cDate);
                 table.setItems(list);
             }
     }
