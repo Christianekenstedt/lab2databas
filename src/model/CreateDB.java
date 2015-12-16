@@ -60,7 +60,7 @@ public class CreateDB {
 
         genre.insertMany(genres);
         grade.insertMany(grades);
-        artist.insertOne(new Document("name", "Michael Jackson").append("Nationality", "USA"));
+        artist.insertOne(new Document("name", "Michael Jackson").append("nationality", "USA"));
 
 
 

@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -70,10 +71,16 @@ public class NoSQLConnection implements DBCommunication{
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
         // TODO
         //kontrollera ifall artisten redan finns.
-        db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
-        MongoCursor<Document> cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
+        MongoCursor<Document> cursor =  db.getCollection("artist").find(Filters.and(Filters.eq("name", artist), Filters.eq("nationality", nationality))).iterator();
         Document docId = null;
-        System.out.println(db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).toString());
+
+        if(!cursor.hasNext()){
+            System.out.println("finns inte");
+            db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
+            cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
+
+            System.out.println(db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).toString());
+        }
 
         while(cursor.hasNext()){
            docId = cursor.next();
