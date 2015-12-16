@@ -2,7 +2,7 @@ package model;
 
 import org.bson.types.ObjectId;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public interface DBCommunication {
      * @param grade
      * @throws SQLException
      */
-    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade)throws SQLException;
+    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade);
 
     /**
      * 

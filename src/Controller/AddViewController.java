@@ -2,9 +2,9 @@ package Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,15 +63,11 @@ public class AddViewController implements Initializable {
         String nationality = nationalityTextField.getText();
         
         if(title.length()>0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null){
-            Date d = Date.valueOf(date);
+            Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
             new Thread(){
                 @Override
                 public void run(){
-                    try {
                         connection.addAlbum(title, artist, nationality, d, genre, grade);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 }
             }.start();
         }else{

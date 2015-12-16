@@ -9,9 +9,10 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.sql.Date;
+//import java.util.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,8 +67,21 @@ public class NoSQLConnection implements DBCommunication{
     }
 
     @Override
-    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException {
+    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade){
+        //kontrollera ifall artisten redan finns.
+        db.getCollection("artist").insertOne(new Document("name", artist).append("nationality", nationality));
+        MongoCursor<Document> cursor =  db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).iterator();
+        Document docId = null;
+        System.out.println(db.getCollection("artist").find().sort(new BasicDBObject("_id", -1)).limit(1).toString());
 
+        while(cursor.hasNext()){
+           docId = cursor.next();
+        }
+
+        System.out.println(docId.getString("name"));
+
+        // Hämta artisten som vi precis la till.
+        db.getCollection("album").insertOne(new Document("name", title).append("artist", docId.getObjectId("_id")).append("ReleaseDate", date).append("genre", genre.getGenreID()).append("grade", grade.getGradeID())); //här behöver vi fixa genreid och genrenamn
     }
 
     @Override
