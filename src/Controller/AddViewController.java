@@ -13,10 +13,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.Genre;
 import model.Grade;
 import model.NoSQLConnection;
@@ -66,9 +68,7 @@ public class AddViewController implements Initializable {
             Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
             new Thread(){
                 @Override
-                public void run(){
-                        connection.addAlbum(title, artist, nationality, d, genre, grade);
-                }
+                public void run(){ connection.addAlbum(title, artist, nationality, d, genre, grade);}
             }.start();
         }else{
             System.out.println("Fill all the fields!");
